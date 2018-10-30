@@ -1,0 +1,38 @@
+
+
+parameters:
+  thumbnails:
+
+    directories:
+      source: "%kernel.project_dir%/public/images"
+      destination: "%kernel.project_dir%/public/thumbnails"
+
+    preset_defaults:
+      quality:
+        jpeg_quality: 100
+        png_compression_level: 5
+        flatten: true
+
+    presets:
+
+      test_sharpen:
+        filters:
+          - name: fit
+            width: 300
+            height: 300
+          - name: sharpen
+
+      test_blur:
+        filters:
+          - name: fit
+            width: 200
+            height: 200
+          - name: sharpen
+
+      test_grayscale:
+        filters:
+          - name: sharpen
+          - name: grayscale
+        quality:
+          jpeg_quality: 85
+          png_compression_level: 7

@@ -1,0 +1,7 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+
+thumbnail:
+    path: /{preset}/{path<.+>}
+    controller: App\Controller\ThumbnailController::index
