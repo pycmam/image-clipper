@@ -2,7 +2,6 @@
 
 namespace App\ImageProcessing\Filters;
 
-
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
 
@@ -20,10 +19,11 @@ class FilterFit extends FilterAbstract
         $this->height = $height;
     }
 
-    public function apply(ImageInterface $image): ImageInterface
+    public function apply(ImageInterface $image): void
     {
-        return $image->thumbnail(new Box($this->width, $this->height),
-            ImageInterface::THUMBNAIL_INSET,
+        $image->thumbnail(
+            new Box($this->width, $this->height),
+            ImageInterface::THUMBNAIL_INSET | ImageInterface::THUMBNAIL_FLAG_NOCLONE,
             static::RESIZE_FILTER
         );
     }

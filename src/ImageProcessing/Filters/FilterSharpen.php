@@ -2,13 +2,12 @@
 
 namespace App\ImageProcessing\Filters;
 
-
 use Imagine\Image\ImageInterface;
 
 class FilterSharpen extends FilterAbstract
 {
-    public function apply(ImageInterface $image): ImageInterface
+    public function apply(ImageInterface $image): void
     {
-        return $image->effects()->sharpen();
+        $image->effects()->sharpen();
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\ImageProcessing\Filters;
 
-
 use Imagine\Image\ImageInterface;
 
 class FilterGamma extends FilterAbstract
@@ -14,9 +13,8 @@ class FilterGamma extends FilterAbstract
         $this->correction = $correction;
     }
 
-    public function apply(ImageInterface $image): ImageInterface
+    public function apply(ImageInterface $image): void
     {
         $image->effects()->gamma($this->correction);
     }
-
 }

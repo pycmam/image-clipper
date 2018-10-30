@@ -2,7 +2,6 @@
 
 namespace App\ImageProcessing\Filters;
 
-
 use Imagine\Image\ImageInterface;
 
 class FilterBlur extends FilterAbstract
@@ -14,9 +13,8 @@ class FilterBlur extends FilterAbstract
         $this->sigma = $sigma;
     }
 
-    public function apply(ImageInterface $image): ImageInterface
+    public function apply(ImageInterface $image): void
     {
         $image->effects()->blur($this->sigma);
     }
-
 }

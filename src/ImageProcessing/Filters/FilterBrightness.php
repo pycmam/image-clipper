@@ -2,7 +2,6 @@
 
 namespace App\ImageProcessing\Filters;
 
-
 use Imagine\Image\ImageInterface;
 
 class FilterBrightness extends FilterAbstract
@@ -14,9 +13,8 @@ class FilterBrightness extends FilterAbstract
         $this->brightness = $brightness;
     }
 
-    public function apply(ImageInterface $image): ImageInterface
+    public function apply(ImageInterface $image): void
     {
-        $image->effects()->grightness($this->brightness);
+        $image->effects()->brightness($this->brightness);
     }
-
 }

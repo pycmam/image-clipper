@@ -2,7 +2,6 @@
 
 namespace App\ImageProcessing\Filters;
 
-
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Palette\RGB;
@@ -11,40 +10,38 @@ use Imagine\Imagick\Imagine;
 
 class FilterFixed extends FilterFit
 {
+    protected const DEFAULT_BACKGROUND = '#ffffff';
+    protected const DEFAULT_ALFA = 100;
 
-    protected const BG_COLOR = '#ffffff';
-    protected const BG_TRANSPARENCY = 0;
-
-    private $bgColor;
-    private $bgTransparency;
+    private $background;
+    private $alfa;
 
     public function __construct(
         int $width,
         int $height,
-        string $bgColor = self::BG_COLOR,
-        int $bgTransparency = self::BG_TRANSPARENCY)
-    {
+        string $background = self::DEFAULT_BACKGROUND,
+        int $alfa = self::DEFAULT_ALFA
+    ) {
         parent::__construct($width, $height);
 
-        $this->bgColor = $bgColor;
-        $this->bgTransparency = $bgTransparency;
+        $this->background = $background;
+        $this->alfa = $alfa;
     }
 
-    public function apply(ImageInterface $image): ImageInterface
+    public function apply(ImageInterface $image): void
     {
-        $thumb = parent::apply($image);
+        parent::apply($image);
 
-        $thumbWidth = $thumb->getSize()->getWidth();
-        $thumbHeight = $thumb->getSize()->getHeight();
+        $thumbWidth = $image->getSize()->getWidth();
+        $thumbHeight = $image->getSize()->getHeight();
 
         $ratio = $thumbWidth / $thumbHeight;
 
         if ($ratio == 0) {
-            return $thumb;
+            return;
         };
 
-        if ($ratio < 1) // width > thumbHeight
-        {
+        if ($ratio < 1) { // width > thumbHeight
             $x = floor(($this->width - $thumbWidth) / 2);
             $y = 0;
         } else { // thumbHeight > width
@@ -52,11 +49,11 @@ class FilterFixed extends FilterFit
             $y = floor(($this->height - $thumbHeight) / 2);
         }
 
-        return (new Imagine())
+        $image = (new Imagine())
             ->create(
                 new Box($this->width, $this->height),
-                (new RGB())->color($this->bgColor, $this->bgTransparency)
+                (new RGB())->color($this->background, $this->alfa)
             )
-            ->paste($thumb, new Point($x, $y));
+            ->paste($image, new Point($x, $y));
     }
 }
