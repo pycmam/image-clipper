@@ -4,6 +4,15 @@
 namespace App\Controller;
 
 
+use App\ImageProcessing\Contracts\FilterInterface;
+use App\ImageProcessing\Filters\FilterBlur;
+use App\ImageProcessing\Filters\FilterBrightness;
+use App\ImageProcessing\Filters\FilterFit;
+use App\ImageProcessing\Filters\FilterFixed;
+use App\ImageProcessing\Filters\FilterGamma;
+use App\ImageProcessing\Filters\FilterGrayscale;
+use App\ImageProcessing\Filters\FilterOverlay;
+use App\ImageProcessing\Filters\FilterSharpen;
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Palette\RGB;
@@ -49,7 +58,7 @@ class ThumbnailController extends AbstractController
 
         $presetConfig = $this->mergePresetConfig($configuration['preset_defaults'], $presets[$preset]);
 
-        $this->buildThumbnail($sourcePath, $thumbnailPath, $presets[$preset]);
+        $this->buildThumbnail($sourcePath, $thumbnailPath, $presetConfig);
 
         return new BinaryFileResponse($thumbnailPath, Response::HTTP_OK, [
             'Content-type' => MimeTypeGuesser::getInstance()->guess($thumbnailPath),
@@ -73,132 +82,46 @@ class ThumbnailController extends AbstractController
         return $config;
     }
 
+    private function makeFilter(string $name, array $params): FilterInterface
+    {
+        $classMap = [
+            'blur' => FilterBlur::class,
+            'brightness' => FilterBrightness::class,
+            'fit' => FilterFit::class,
+            'fixed' => FilterFixed::class,
+            'gamma' => FilterGamma::class,
+            'grayscale' => FilterGrayscale::class,
+            'overlay' => FilterOverlay::class,
+            'sharpen' => FilterSharpen::class,
+        ];
 
-    private function buildThumbnail(string $sourcePath, string $thumbnailPath, array $config)
+        if (! isset($classMap[$name])) {
+            throw new \InvalidArgumentException(sprintf('Filter "%s" not found.', $name));
+        }
+
+        return $classMap[$name](...$params);
+    }
+
+    private function buildThumbnail(string $sourcePath, string $savePath, array $config): void
     {
         $image = (new Imagine())->open($sourcePath);
 
-//        foreach ($config['filters'] as $action)
-//        {
-//            if (count($action) > 1)
-//            {
-//                list ($operation, $params) = $action;
-//            } else {
-//                $operation = $action[0];
-//                $params = null;
-//            }
-//
-//            switch ($operation)
-//            {
-//
-//                case 'fit':
-//
-//                    $image = $image->thumbnail(new Box($params[0], $params[1]),
-//                        ImageInterface::THUMBNAIL_INSET,
-//                        isset($params[3]) ? $params[3] : ImageInterface::FILTER_LANCZOS
-//                    );
-//
-//                    break;
-//
-//                case 'fixed':
-//
-//                    $image = $image->thumbnail(new Box($params[0], $params[1]),
-//                        ImageInterface::THUMBNAIL_INSET,
-//                        isset($params[3]) ? $params[3] : ImageInterface::FILTER_LANCZOS);
-//
-//                    $width = $image->getSize()->getWidth();
-//                    $height = $image->getSize()->getHeight();
-//
-//                    $ratio = $width / $height;
-//
-//                    if ($ratio == 0) continue;
-//
-//                    if ($ratio < 1) // width > height
-//                    {
-//
-//                        $x = floor(($params[0] - $width) / 2);
-//                        $y = 0;
-//
-//                    } else { // height > width
-//
-//                        $x = 0;
-//                        $y = floor(($params[1] - $height) / 2);
-//                    }
-//
-//                    $bg = (new Imagine())
-//                        ->create(new Box($params[0], $params[1]), (new RGB())->color('#fff', 0))
-//                        ->paste($image, new Point($x, $y));
-//
-//                    $image = $bg;
-//
-//                    break;
-//
-//                case 'overlay':
-//
-//                    $overlay = (new Imagine())
-//                        ->open(config('app.overlays_dir') . DIRECTORY_SEPARATOR . $params[0]);
-//
-//                    if ($overlay->getSize()->getWidth() > $image->getSize()->getWidth() ||
-//                        $overlay->getSize()->getHeight() > $image->getSize()->getHeight())
-//                    {
-//
-//                        $overlay = $overlay->thumbnail(
-//                            new Box($image->getSize()->getWidth(), $image->getSize()->getHeight()),
-//                            ImageInterface::THUMBNAIL_INSET
-//                        );
-//                    }
-//
-//
-//                    $x = floor(($image->getSize()->getWidth() - $overlay->getSize()->getWidth()) / 2);
-//                    $y = floor(($image->getSize()->getHeight() - $overlay->getSize()->getHeight()) / 2);
-//
-//                    $image->paste($overlay, new Point($x, $y));
-//
-//                    break;
-//
-//                case 'blur':
-//
-//                    $image->effects()->blur($params);
-//
-//                    break;
-//
-//                case 'grayscale':
-//
-//                    $image->effects()->grayscale();
-//
-//                    break;
-//
-//
-//                case 'gamma':
-//
-//                    $image->effects()->gamma($params);
-//
-//                    break;
-//
-//                case 'sharpen':
-//
-//                    $image->effects()->sharpen();
-//
-//                    break;
-//
-//                default:
-//                    throw new \InvalidArgumentException('Invalid operation: '.$operation);
-//            }
-//
-//        }
-//
-//        if (! file_exists(dirname($thumbnailPath)))
-//        {
-//            mkdir(dirname($thumbnailPath), 0777, true);
-//        }
-//
-//        $image->save($thumbnailPath, [
-//            'jpeg_quality'          => isset($config['quality']) ? $config['quality'] : 100,
-//            'png_compression_level' => isset($config['compression']) ? $config['compression'] : 5,
-//            'flatten'               => isset($config['flatten']) ? $config['flatten'] : true,
-//        ]);
-//        @chmod($thumbnailPath, 0777);
+        foreach ($config['filters'] as $filterConfig)
+        {
+            $name = $filterConfig['name'];
+            unset($filterConfig['name']);
 
-        return $image;
+            $filter = $this->makeFilter($name, $filterConfig);
+
+            $image = $filter->apply($image);
+        }
+
+        if (! file_exists(dirname($savePath)))
+        {
+            mkdir(dirname($savePath), 0777, true);
+        }
+
+        $image->save($savePath, $config['quality']);
+        chmod($savePath, 0777);
     }
 }
