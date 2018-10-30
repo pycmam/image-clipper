@@ -4,8 +4,9 @@ Thumbnail generation microservice
 
 ### Usage
 
+1. `cp config/thumbnails.yaml-dist config/thumbnails.yaml`
 1. `php -S localhost:8000 -t public/`
-1. `GET http://localhost:8000/combined/hahaclassic.jpg`
+1. `GET http://localhost:8000/index.php/combined/hahaclassic.jpg`
 
 URL parts:
 * `combined` - thumbnail preset name
