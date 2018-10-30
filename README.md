@@ -2,6 +2,15 @@
 
 Thumbnail generation microservice
 
+### Usage
+
+1. `php -S localhost:8000 -t public/`
+1. `GET http://localhost:8000/combined/hahaclassic.jpg`
+
+URL parts:
+* `combined` - thumbnail preset name
+* `/hahaclassic.jpg` - relative path from source directory
+
 ### Requirements
 * PHP >= 7.1
 * Imagick
@@ -82,5 +91,103 @@ Param|Type|Description
 
 ### Thumbnails presets configuration
 
-`config/thumbnails.yaml`
+Sample configuration in: [config/thumbnails.yml-dist](/config/thumbnails.yaml-dist)
 
+```yaml
+
+parameters:
+  thumbnails:
+
+    # directories configuration
+    directories:
+      source: "%kernel.project_dir%/public/images"
+      destination: "%kernel.project_dir%/public/thumbnails"
+
+    # default presets config
+    preset_defaults:
+      quality:
+        jpeg_quality: 85
+        png_compression_level: 5
+        flatten: true
+
+    # presets config
+    presets:
+
+      blur:
+        filters:
+          - name: blur
+            sigma: 2
+
+      brightness_dark:
+        filters:
+          - name: brightness
+            brightness: -30
+
+      brightness_light:
+        filters:
+          - name: brightness
+            brightness: 30
+
+      fit:
+        filters:
+          - name: fit
+            width: 150
+            height: 150
+
+      fixed:
+        filters:
+          - name: fixed
+            width: 400
+            height: 200
+
+      flip_h:
+        filters:
+          - name: flip
+            axis: h
+
+      flip_v:
+        filters:
+          - name: flip
+            axis: v
+
+      gamma:
+        filters:
+          - name: gamma
+            correction: 10
+
+      grayscape:
+        filters:
+          - name: grayscale
+
+      negative:
+        filters:
+          - name: negative
+
+      overlay:
+        filters:
+          - name: overlay
+            path: "%kernel.project_dir%/public/images/overlay.png"
+
+      rotate:
+        filters:
+          - name: rotate
+            angle: 45
+
+      sharpen:
+        filters:
+          - name: sharpen
+
+      combined:
+        filters:
+          - name: fit
+            width: 150
+            height: 150
+
+          - name: blur
+            sigma: 1
+
+          - name: grayscale
+
+          - name: overlay
+            path: "%kernel.project_dir%/public/images/overlay.png"
+```
