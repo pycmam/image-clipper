@@ -1,0 +1,94 @@
+
+
+parameters:
+  thumbnails:
+
+    directories:
+      source: "%kernel.project_dir%/public/images"
+      destination: "%kernel.project_dir%/public/thumbnails"
+
+    preset_defaults:
+      quality:
+        jpeg_quality: 85
+        png_compression_level: 5
+        flatten: true
+
+    presets:
+
+      blur:
+        filters:
+          - name: blur
+            sigma: 2
+
+      brightness_dark:
+        filters:
+          - name: brightness
+            brightness: -30
+
+      brightness_light:
+        filters:
+          - name: brightness
+            brightness: 30
+
+      fit:
+        filters:
+          - name: fit
+            width: 150
+            height: 150
+
+      fixed:
+        filters:
+          - name: fixed
+            width: 400
+            height: 200
+
+      flip_h:
+        filters:
+          - name: flip
+            axis: h
+
+      flip_v:
+        filters:
+          - name: flip
+            axis: v
+
+      gamma:
+        filters:
+          - name: gamma
+            correction: 10
+
+      grayscape:
+        filters:
+          - name: grayscale
+
+      negative:
+        filters:
+          - name: negative
+
+      overlay:
+        filters:
+          - name: overlay
+            path: "%kernel.project_dir%/public/images/overlay.png"
+
+      rotate:
+        filters:
+          - name: rotate
+            angle: 45
+
+      sharpen:
+        filters:
+          - name: sharpen
+
+      combined:
+        filters:
+          - name: fit
+            width: 150
+            height: 150
+
+          - name: blur
+            sigma: 1
+
+          - name: grayscale
+
+          - name: overlay
+            path: "%kernel.project_dir%/public/images/overlay.png"
