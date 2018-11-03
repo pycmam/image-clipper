@@ -20,22 +20,22 @@ URL parts:
 
 ### Available filters
 
-[`blur`](blur),
-[`brightness`](brightness),
-[`contrast`](contrast),
-[`crop`](crop),
-[`fit`](fit),
-[`fixed`](fixed),
-[`flip`](flip),
-[`gamma`](gamma),
-[`greyscale`](greyscale),
-[`negative`](negative),
-[`opacity`](opacity),
-[`overlay`](overlay),
-[`pixelate`](pixelate),
-[`rotate`](rotate),
-[`sharpen`](sharpen),
-[`text`](text)
+[`blur`](#blur),
+[`brightness`](#brightness),
+[`contrast`](#contrast),
+[`crop`](#crop),
+[`fit`](#fit),
+[`fixed`](#fixed),
+[`flip`](#flip),
+[`gamma`](#gamma),
+[`greyscale`](#greyscale),
+[`negative`](#negative),
+[`opacity`](#opacity),
+[`overlay`](#overlay),
+[`pixelate`](#pixelate),
+[`rotate`](#rotate),
+[`sharpen`](#sharpen),
+[`text`](#text)
 
 #### Blur
 
