@@ -2,19 +2,27 @@
 
 namespace App\ImageProcessing\Filters;
 
-use Imagine\Image\ImageInterface;
+use Intervention\Image\Image;
 
+/**
+ * Performs a gamma correction operation
+ */
 class FilterGamma extends FilterAbstract
 {
     private $correction;
 
+    /**
+     * FilterGamma constructor.
+     *
+     * @param float $correction Gamma compensation value.
+     */
     public function __construct(float $correction)
     {
         $this->correction = $correction;
     }
 
-    public function apply(ImageInterface $image): void
+    public function apply(Image $image): void
     {
-        $image->effects()->gamma($this->correction);
+        $image->gamma($this->correction);
     }
 }

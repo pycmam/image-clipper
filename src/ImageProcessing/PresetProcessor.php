@@ -4,8 +4,11 @@ namespace App\ImageProcessing;
 
 use App\ImageProcessing\Contracts\FilterBuilderInterface;
 use App\ImageProcessing\Contracts\ProcessorInterface;
-use Imagine\Image\ImageInterface;
+use Intervention\Image\Image;
 
+/**
+ * Applies given filters to image
+ */
 class PresetProcessor implements ProcessorInterface
 {
     private $builder;
@@ -15,7 +18,7 @@ class PresetProcessor implements ProcessorInterface
         $this->builder = $builder;
     }
 
-    public function process(ImageInterface $image, array $filters): void
+    public function process(Image $image, array $filters): void
     {
         foreach ($filters as $params) {
             $name = strtolower($params['name']);

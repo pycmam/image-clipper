@@ -2,12 +2,12 @@
 
 namespace App\ImageProcessing\Contracts;
 
-use Imagine\Image\ImageInterface;
+use Intervention\Image\Image;
 
 /**
  * Filter interface
  */
 interface FilterInterface
 {
-    public function apply(ImageInterface $image): void;
+    public function apply(Image $image): void;
 }

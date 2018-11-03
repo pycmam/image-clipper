@@ -2,12 +2,12 @@
 
 namespace App\ImageProcessing\Contracts;
 
-use Imagine\Image\ImageInterface;
+use Intervention\Image\Image;
 
 /**
  * Preset processor interface
  */
 interface ProcessorInterface
 {
-    public function process(ImageInterface $image, array $config): void;
+    public function process(Image $image, array $config): void;
 }

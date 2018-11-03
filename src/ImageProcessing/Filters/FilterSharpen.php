@@ -2,12 +2,27 @@
 
 namespace App\ImageProcessing\Filters;
 
-use Imagine\Image\ImageInterface;
+use Intervention\Image\Image;
 
+/**
+ * Sharpen current image with an optional amount.
+ */
 class FilterSharpen extends FilterAbstract
 {
-    public function apply(ImageInterface $image): void
+    private $amount;
+
+    /**
+     * FilterSharpen constructor.
+     *
+     * @param int $amount The amount of the sharpening strength from 0 to 100
+     */
+    public function __construct(int $amount = 10)
     {
-        $image->effects()->sharpen();
+        $this->amount = $amount;
+    }
+
+    public function apply(Image $image): void
+    {
+        $image->sharpen($this->amount);
     }
 }

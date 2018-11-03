@@ -5,12 +5,12 @@ namespace App\ImageProcessing\Filters;
 use Intervention\Image\Image;
 
 /**
- * Reverses all colors
+ * Turns image into a greyscale version.
  */
-class FilterNegative extends FilterAbstract
+class FilterGreyscale extends FilterAbstract
 {
     public function apply(Image $image): void
     {
-        $image->invert();
+        $image->greyscale();
     }
 }

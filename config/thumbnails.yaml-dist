@@ -3,44 +3,55 @@
 parameters:
   thumbnails:
 
+    driver: imagick
+    #driver: gd
+
     directories:
       source: "%kernel.project_dir%/public/images"
       destination: "%kernel.project_dir%/public/thumbnails"
 
     preset_defaults:
-      quality:
-        jpeg_quality: 85
-        png_compression_level: 5
-        flatten: true
+      quality: 85
 
     presets:
 
       blur:
         filters:
           - name: blur
-            sigma: 2
+            amount: 2
 
       brightness_dark:
         filters:
           - name: brightness
-            brightness: -30
+            level: -30
+
+      contrast:
+        filters:
+          - name: contrast
+            level: 30
 
       brightness_light:
         filters:
           - name: brightness
-            brightness: 30
+            level: 30
+
+      crop:
+        filters:
+          - name: crop
+            width: 150
+            height: 150
 
       fit:
         filters:
           - name: fit
-            width: 150
-            height: 150
+            width: 200
+            height: 200
 
       fixed:
         filters:
           - name: fixed
-            width: 400
-            height: 200
+            width: 300
+            height: 400
 
       flip_h:
         filters:
@@ -57,18 +68,28 @@ parameters:
           - name: gamma
             correction: 10
 
-      grayscape:
+      greyscale:
         filters:
-          - name: grayscale
+          - name: greyscale
 
       negative:
         filters:
           - name: negative
 
+      opacity:
+        filters:
+          - name: opacity
+            transparency: 50
+
       overlay:
         filters:
           - name: overlay
-            path: "%kernel.project_dir%/public/images/overlay.png"
+            path: "%kernel.project_dir%/data/images/overlay.png"
+
+      pixelate:
+        filters:
+          - name: pixelate
+            size: 4
 
       rotate:
         filters:
@@ -78,17 +99,29 @@ parameters:
       sharpen:
         filters:
           - name: sharpen
+            amount: 10
+
+      text:
+        filters:
+          - name: text
+            text: Котики!
+            font: "%kernel.project_dir%/data/fonts/open-sans/OpenSans-Regular.ttf"
+            color: "#ff0000"
+            align: center
+            valign: middle
+            angle: 30
+
 
       combined:
         filters:
           - name: fit
-            width: 150
-            height: 150
+            width: 300
+            height: 400
 
           - name: blur
             sigma: 1
 
-          - name: grayscale
+          - name: greyscale
 
           - name: overlay
-            path: "%kernel.project_dir%/public/images/overlay.png"
+            path: "%kernel.project_dir%/data/images/overlay.png"

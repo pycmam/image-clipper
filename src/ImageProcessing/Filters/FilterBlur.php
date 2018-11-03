@@ -2,19 +2,27 @@
 
 namespace App\ImageProcessing\Filters;
 
-use Imagine\Image\ImageInterface;
+use Intervention\Image\Image;
 
+/**
+ * Apply a gaussian blur filter with a optional amount
+ */
 class FilterBlur extends FilterAbstract
 {
-    private $sigma;
+    private $amount;
 
-    public function __construct(float $sigma)
+    /**
+     * FilterBlur constructor.
+     *
+     * @param int $amount from 0 to 100
+     */
+    public function __construct(int $amount = 1)
     {
-        $this->sigma = $sigma;
+        $this->amount = $amount;
     }
 
-    public function apply(ImageInterface $image): void
+    public function apply(Image $image): void
     {
-        $image->effects()->blur($this->sigma);
+        $image->blur($this->amount);
     }
 }

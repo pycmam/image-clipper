@@ -2,29 +2,37 @@
 
 namespace App\ImageProcessing\Filters;
 
-use Imagine\Image\Box;
-use Imagine\Image\ImageInterface;
+use Intervention\Image\Image;
 
+/**
+ * Combine cropping and resizing to format image in a smart way.
+ * The filter will find the best fitting aspect ratio of your given width and height on the current image automatically,
+ * cut it out and resize it to the given dimension.
+ */
 class FilterFit extends FilterAbstract
 {
     protected $width;
     protected $height;
-    protected $filter;
+    protected $position;
 
-    protected const RESIZE_FILTER = ImageInterface::FILTER_LANCZOS;
-
-    public function __construct(int $width, int $height)
+    /**
+     * FilterFit constructor.
+     *
+     * @param int $width The width the image will be resized to after cropping out the best fitting aspect ratio.
+     * @param int $height The height the image will be resized to after cropping out the best fitting aspect ratio.
+     *                    If no height is given, method will use same value as width.
+     * @param string $position Set a position where cutout will be positioned.
+     *                         By default the best fitting aspect ration is centered.
+     */
+    public function __construct(int $width, int $height = null, string $position = 'center')
     {
         $this->width = $width;
         $this->height = $height;
+        $this->position = $position;
     }
 
-    public function apply(ImageInterface $image): void
+    public function apply(Image $image): void
     {
-        $image->thumbnail(
-            new Box($this->width, $this->height),
-            ImageInterface::THUMBNAIL_INSET | ImageInterface::THUMBNAIL_FLAG_NOCLONE,
-            static::RESIZE_FILTER
-        );
+        $image->fit($this->width, $this->height, null, $this->position);
     }
 }
