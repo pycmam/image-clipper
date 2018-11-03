@@ -2,30 +2,28 @@
 
 namespace App\ImageProcessing\Filters;
 
-use Imagine\Image\ImageInterface;
+use Intervention\Image\Image;
 
+/**
+ * Mirror the current image horizontally or vertically by specifying the mode
+ */
 class FilterFlip extends FilterAbstract
 {
     private $axis;
 
-    private const AXIS_V = 'v';
-    private const AXIS_H = 'h';
-
+    /**
+     * FilterFlip constructor.
+     *
+     * @param string $axis Specify the mode the image will be flipped.
+     *                     You can set h for horizontal (default) or v for vertical flip.
+     */
     public function __construct(string $axis)
     {
         $this->axis = strtolower($axis);
     }
 
-    public function apply(ImageInterface $image): void
+    public function apply(Image $image): void
     {
-        if (self::AXIS_H === $this->axis) {
-            $image->flipHorizontally();
-        } else {
-            if (self::AXIS_V === $this->axis) {
-                $image->flipVertically();
-            } else {
-                throw new \InvalidArgumentException(sprintf('Invalid flip axis: %s', $this->axis));
-            }
-        }
+        $image->flip($this->axis);
     }
 }

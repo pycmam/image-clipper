@@ -3,9 +3,9 @@
 namespace App\ImageProcessing\Filters;
 
 use App\ImageProcessing\Contracts\FilterInterface;
-use Imagine\Image\ImageInterface;
+use Intervention\Image\Image;;
 
 abstract class FilterAbstract implements FilterInterface
 {
-    abstract public function apply(ImageInterface $image): void;
+    abstract public function apply(Image $image): void;
 }

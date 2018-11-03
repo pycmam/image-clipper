@@ -5,16 +5,16 @@ namespace App\ImageProcessing\Filters;
 use Intervention\Image\Image;
 
 /**
- * Changes the brightness of the current image by the given level.
+ * Changes the contrast of the current image by the given level.
  */
-class FilterBrightness extends FilterAbstract
+class FilterContrast extends FilterAbstract
 {
     private $level;
 
     /**
-     * FilterBrightness constructor.
+     * FilterContrast constructor.
      *
-     * @param int $level from -100 to 100, 0 - no change
+     * @param int $level from -100 to 100, 0 - no changes
      */
     public function __construct(int $level)
     {
@@ -23,6 +23,6 @@ class FilterBrightness extends FilterAbstract
 
     public function apply(Image $image): void
     {
-        $image->brightness($this->level);
+        $image->contrast($this->level);
     }
 }

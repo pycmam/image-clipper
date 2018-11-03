@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Helpers\ConfigHelper;
 use App\ImageProcessing\Contracts\ProcessorInterface;
 use Imagine\Imagick\Imagine;
+use Intervention\Image\ImageManager;
 
 /**
  *
@@ -31,6 +32,9 @@ class ThumbnailService
      */
     private $destination;
 
+    /** @var ImageManager */
+    private $manager = null;
+
     /**
      * @var ProcessorInterface
      */
@@ -44,6 +48,8 @@ class ThumbnailService
         $this->destination = $config['directories']['destination'];
 
         $this->processor = $processor;
+
+        $this->manager = $this->makeManager($config['driver']);
     }
 
     public function buildThumbnail(string $preset, string $path): string
@@ -53,7 +59,7 @@ class ThumbnailService
 
         $this->checkDestinationPath($thumbnailPath);
 
-        $image = (new Imagine())->open($this->getSourcePath($path));
+        $image = $this->manager->make($this->getSourcePath($path));
 
         $this->processor->process($image, $config['filters']);
 
@@ -104,5 +110,10 @@ class ThumbnailService
     private function getSourcePath(string $relativePath): string
     {
         return $this->source . DIRECTORY_SEPARATOR . $relativePath;
+    }
+
+    private function makeManager(string $driver): ImageManager
+    {
+        return new ImageManager(['driver' => $driver]);
     }
 }
