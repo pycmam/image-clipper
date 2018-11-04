@@ -111,6 +111,18 @@ parameters:
             valign: middle
             angle: 30
 
+      face_rect:
+        filters:
+          - name: face_rect
+            cascade: "/usr/local/Cellar/opencv/3.4.3/share/OpenCV/haarcascades/haarcascade_frontalface_alt.xml"
+            color: "#00ff00"
+            size: 5
+
+      face_crop:
+        filters:
+          - name: face_crop
+            cascade: "/usr/local/Cellar/opencv/3.4.3/share/OpenCV/haarcascades/haarcascade_frontalface_alt.xml"
+
 
       combined:
         filters:
