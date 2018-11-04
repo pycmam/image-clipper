@@ -17,6 +17,7 @@ URL parts:
 ### Requirements
 * PHP >= 7.1
 * Imagick or GD
+* *optional* OpenCV and [PHP-Facedetect](https://github.com/infusion/PHP-Facedetect) ext for face detecting filters
 
 ### Available filters
 
@@ -24,6 +25,8 @@ URL parts:
 [`brightness`](#brightness),
 [`contrast`](#contrast),
 [`crop`](#crop),
+[`face_crop`](#face-crop),
+[`face_rect`](#face-rect),
 [`fit`](#fit),
 [`fixed`](#fixed),
 [`flip`](#flip),
@@ -37,7 +40,7 @@ URL parts:
 [`sharpen`](#sharpen),
 [`text`](#text)
 
-#### Blur
+### Blur
 
 Apply a gaussian blur filter with a optional amount on the current image.
 
@@ -46,7 +49,7 @@ Param|Type|Description
 `amount`| `int`| The amount of the blur strength. Use values between 0 and 100. Default: 1
 
 
-#### Brightness
+### Brightness
 
 Changes the brightness of the current image by the given level. Use values between -100 for min. brightness 0 for no change and +100 for max. brightness.
 
@@ -54,7 +57,7 @@ Param|Type|Description
 -----|----|-------
 `level`|`int` | Level of brightness change applied to the current image. Use values between -100 and +100.
 
-#### Contrast
+### Contrast
 
 Changes the contrast of the current image by the given level.
 
@@ -62,7 +65,7 @@ Param|Type|Description
 -----|----|-------
 `level`| `int` | Level of contrast change applied to the current image. Use values between -100 and +100.
 
-#### Crop
+### Crop
 
 Cut out a rectangular part of the current image with given width and height. Define optional x,y coordinates to move the top-left corner of the cutout to a certain position.
 
@@ -74,7 +77,27 @@ Param|Type|Description
 `y`| `int` | Y-Coordinate of the top-left corner if the rectangular cutout. By default the rectangular part will be centered on the current image.
 
 
-#### Fit
+### Face Crop
+
+**Experimental!**
+
+Uses the OpenCV library to search for faces. Cuts along the contour of the first face found.
+
+Param|Type|Description
+-----|----|-------
+`cascade`|`string`| Path to OpenCV Haar cascade XML
+
+### Face Rect
+
+Uses the OpenCV library to search for faces. Draws the rectangles of the faces found.
+
+Param|Type|Description
+-----|----|-------
+`cascade`|`string`| Path to OpenCV Haar cascade XML
+`size`|`int`| Border size, default is `1`
+`color`|`string`| Border color, default is `#ff0000`
+
+### Fit
 
 Combine cropping and resizing to format image in a smart way. The filter will find the best fitting aspect ratio of your given width and height on the current image automatically, cut it out and resize it to the given dimension.
 
@@ -96,7 +119,7 @@ Position possible values:
 * bottom
 * bottom-right
 
-#### Fixed
+### Fixed
 
 Param|Type|Description
 -----|----|-------
@@ -106,7 +129,7 @@ Param|Type|Description
 `background`|`string`| Background color, default `#ffffff`. Can be used to specify the fill color of the empty area.
 
 
-#### Flip
+### Flip
 
 Mirror the current image horizontally or vertically by specifying the mode
 
@@ -114,7 +137,7 @@ Param|Type|Description
 -----|----|-------
 `axis`|`string(1)`| Specify the mode the image will be flipped. You can set `h` for horizontal (default) or `v` for vertical flip.
 
-#### Gamma
+### Gamma
 
 Performs a gamma correction operation
 
@@ -122,15 +145,15 @@ Param|Type|Description
 -----|----|-------
 `correction`|`float`| Gamma compensation value.
 
-#### Greyscale
+### Greyscale
 
 Turns image into a greyscale version.
 
-#### Negative
+### Negative
 
 Reverses all colors
 
-#### Opacity
+### Opacity
 
 Set the opacity in percent of the current image ranging from 100% for opaque and 0% for full transparency.
 
@@ -138,7 +161,7 @@ Param|Type|Description
 -----|----|-------
 `transparency`|`int`| The new percent of transparency for the current image.
 
-#### Overlay
+### Overlay
 
 Paste a given image source over the current image with an optional position and a offset coordinate
 
@@ -150,7 +173,7 @@ Param|Type|Description
 `y` | Optional relative offset of the new image on y-axis of the current image. Offset will be calculated relative to the position parameter.
 
 
-#### Pixelate
+### Pixelate
 
 Applies a pixelation effect to the current image with a given size of pixels.
 
@@ -158,7 +181,7 @@ Param|Type|Description
 -----|----|-------
 `size`|`int`| Size of the pixels.
 
-#### Rotate
+### Rotate
 
 Rotate the current image counter-clockwise by a given angle. Optionally define a background color for the uncovered zone after the rotation.
 
@@ -167,7 +190,7 @@ Param|Type|Description
 `angle`|`float`| The rotation angle in degrees to rotate the image counter-clockwise.
 `background`|`string`| A background color for the uncovered zone after the rotation. Default `#ffffff` or transparent.
 
-#### Sharpen
+### Sharpen
 
 Sharpen current image with an optional amount.
 
@@ -175,7 +198,7 @@ Param|Type|Description
 -----|----|-------
 `amount`|`int`| The amount of the sharpening strength. Filter accepts values between 0 and 100. Default: 10
 
-#### Text
+### Text
 
 Write a text string to the current image at an optional x,y basepoint position
 
