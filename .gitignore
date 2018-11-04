@@ -1,8 +1,13 @@
 
 ###> symfony/framework-bundle ###
+.DS_Store
 /.env
 /public/bundles/
 /public/thumbnails/
+/public/images/*
+!/public/images/hahaclassic.jpg
+!/public/images/kittens.png
+!/public/images/cat.png
 /var/
 /vendor/
 ###< symfony/framework-bundle ###

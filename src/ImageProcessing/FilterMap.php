@@ -6,6 +6,8 @@ use App\ImageProcessing\Filters\FilterBlur;
 use App\ImageProcessing\Filters\FilterBrightness;
 use App\ImageProcessing\Filters\FilterContrast;
 use App\ImageProcessing\Filters\FilterCrop;
+use App\ImageProcessing\Filters\FilterFaceCrop;
+use App\ImageProcessing\Filters\FilterFaceRect;
 use App\ImageProcessing\Filters\FilterFit;
 use App\ImageProcessing\Filters\FilterFixed;
 use App\ImageProcessing\Filters\FilterFlip;
@@ -29,6 +31,8 @@ class FilterMap
         'brightness' => FilterBrightness::class,
         'contrast' => FilterContrast::class,
         'crop' => FilterCrop::class,
+        'face_crop' => FilterFaceCrop::class,
+        'face_rect' => FilterFaceRect::class,
         'fit' => FilterFit::class,
         'fixed' => FilterFixed::class,
         'flip' => FilterFlip::class,
